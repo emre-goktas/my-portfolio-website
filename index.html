@@ -425,68 +425,65 @@
     </main>
 
     <!-- Footer -->
-<footer class="border-t border-gray-800 bg-black/20 py-8 text-gray-400">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-6">
+    <footer class="border-t border-gray-800 bg-black/20 py-10 text-gray-400">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Live World Clocks & Date Container -->
-        <div x-data="{
-                currentDate: '',
-                clocks: [
-                    { name: 'IST', zone: 'Europe/Istanbul', time: '' },
-                    { name: 'NYC', zone: 'America/New_York', time: '' },
-                    { name: 'LON', zone: 'Europe/London', time: '' },
-                    { name: 'MOW', zone: 'Europe/Moscow', time: '' },
-                    { name: 'PAR', zone: 'Europe/Paris', time: '' },
-                    { name: 'BER', zone: 'Europe/Berlin', time: '' },
-                    { name: 'TYO', zone: 'Asia/Tokyo', time: '' },
-                    { name: 'BJS', zone: 'Asia/Shanghai', time: '' }
-                ],
-                updateDateTime() {
-                    // Türkiye için Güncel Tarih (GG.AA.YYYY veya isteğe göre en-US formatı)
-                    this.currentDate = new Intl.DateTimeFormat('tr-TR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    }).format(new Date());
+            <!-- Live World Clocks & Date -->
+            <div x-data="{
+                    currentDate: '',
+                    clocks: [
+                        { name: 'IST', zone: 'Europe/Istanbul', time: '' },
+                        { name: 'NYC', zone: 'America/New_York', time: '' },
+                        { name: 'LON', zone: 'Europe/London', time: '' },
+                        { name: 'MOW', zone: 'Europe/Moscow', time: '' },
+                        { name: 'PAR', zone: 'Europe/Paris', time: '' },
+                        { name: 'BER', zone: 'Europe/Berlin', time: '' },
+                        { name: 'TYO', zone: 'Asia/Tokyo', time: '' },
+                        { name: 'BJS', zone: 'Asia/Shanghai', time: '' }
+                    ],
+                    updateDateTime() {
+                        const now = new Date();
+                        const dd = String(now.getDate()).padStart(2, '0');
+                        const mm = String(now.getMonth() + 1).padStart(2, '0');
+                        this.currentDate = `${dd}.${mm}.${now.getFullYear()}`;
 
-                    // Şehirlerin Saatleri
-                    this.clocks.forEach(c => {
-                        c.time = new Intl.DateTimeFormat('en-US', {
-                            timeZone: c.zone,
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                        }).format(new Date());
-                    });
-                }
-            }"
-            x-init="updateDateTime(); setInterval(() => updateDateTime(), 10000)"
-            class="w-full flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 text-xs tracking-wider font-mono bg-darkCard/60 px-6 py-3 rounded-2xl md:rounded-full border border-gray-800/60 shadow-inner">
+                        this.clocks.forEach(c => {
+                            c.time = new Intl.DateTimeFormat('en-US', {
+                                timeZone: c.zone,
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: false
+                            }).format(now);
+                        });
+                    }
+                }"
+                x-init="updateDateTime(); setInterval(() => updateDateTime(), 1000)"
+                class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-            <!-- Türkiye Tarihi Section -->
-            <div class="flex items-center gap-2 border-b md:border-b-0 md:border-r border-gray-800 pb-2 md:pb-0 md:pr-4">
-                <span class="text-gray-500 font-semibold uppercase">DATE:</span>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPurple font-bold" x-text="currentDate"></span>
-            </div>
-            
-            <!-- Saatler Listesi -->
-            <div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
-                <template x-for="clock in clocks" :key="clock.name">
-                    <div class="flex items-center gap-1.5">
-                        <!-- Live indicator dot -->
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" x-show="clock.name === 'IST'"></span>
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500/80" x-show="clock.name !== 'IST'"></span>
+                <!-- Date -->
+                <div class="flex items-center justify-center md:justify-start gap-2">
+                    <span class="text-gray-500 font-semibold uppercase tracking-wider text-sm">Date:</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPurple font-bold text-base sm:text-lg tabular-nums" x-text="currentDate"></span>
+                </div>
 
-                        <span class="text-gray-500 font-semibold" x-text="clock.name"></span>
-                        <span class="text-neonCyan font-bold tracking-normal" x-text="clock.time"></span>
-                    </div>
-                </template>
+                <!-- City clocks -->
+                <div class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+                    <template x-for="clock in clocks" :key="clock.name">
+                        <div class="flex items-center gap-2">
+                            <!-- Live indicator dot -->
+                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" x-show="clock.name === 'IST'"></span>
+                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500/80" x-show="clock.name !== 'IST'"></span>
+
+                            <span class="text-gray-500 font-semibold text-sm" x-text="clock.name"></span>
+                            <span class="text-neonCyan font-bold text-base sm:text-lg tabular-nums" x-text="clock.time"></span>
+                        </div>
+                    </template>
+                </div>
+
             </div>
 
         </div>
-
-    </div>
-</footer>
+    </footer>
 
 </body>
 
