@@ -1,6 +1,8 @@
-[
-  {
-    "title": "Welcome to My Blog",
-    "file": "blog/welcome.md"
-  }
-]
+{
+  "posts": [
+    {
+      "title": "Welcome to My Blog",
+      "file": "blog/welcome.md"
+    }
+  ]
+}

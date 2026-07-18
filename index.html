@@ -154,7 +154,7 @@
                     try {
                         const response = await fetch(`/projects/projects.json?t=${new Date().getTime()}`);
                         if (!response.ok) throw new Error('Projeler yüklenemedi.');
-                        this.projects = await response.json();
+                        this.projects = (await response.json()).projects;
                     } catch (err) {
                         this.error = err.message;
                         console.error("Fetch error: ", err);
@@ -179,7 +179,7 @@
                         // Prevent JSON caching
                         const res = await fetch(`/blog/blogs.json?t=${new Date().getTime()}`);
                         if (res.ok) {
-                            this.blogList = await res.json();
+                            this.blogList = (await res.json()).posts;
                         }
                     } catch (err) {
                         console.error("Failed to load blog list", err);
@@ -223,7 +223,7 @@
                     try {
                         const res = await fetch(`/projects/projects.json?t=${new Date().getTime()}`);
                         if (!res.ok) throw new Error('Projeler yüklenemedi.');
-                        const data = await res.json();
+                        const data = (await res.json()).projects;
                         this.featured = data.slice(0, 3);
                     } catch (err) {
                         console.error("Fetch error: ", err);
@@ -253,7 +253,7 @@
                     try {
                         // 1. Fetch JSON to get Project Meta
                         const res = await fetch(`/projects/projects.json?t=${new Date().getTime()}`);
-                        const data = await res.json();
+                        const data = (await res.json()).projects;
                         this.project = data.find(p => p.id === this.projectId);
 
                         if (!this.project) {
@@ -428,9 +428,8 @@
     <footer class="border-t border-gray-800 bg-black/20 py-10 text-gray-400">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Live World Clocks & Date -->
+            <!-- Live World Clocks -->
             <div x-data="{
-                    currentDate: '',
                     clocks: [
                         { name: 'IST', zone: 'Europe/Istanbul', time: '' },
                         { name: 'NYC', zone: 'America/New_York', time: '' },
@@ -441,12 +440,8 @@
                         { name: 'TYO', zone: 'Asia/Tokyo', time: '' },
                         { name: 'BJS', zone: 'Asia/Shanghai', time: '' }
                     ],
-                    updateDateTime() {
+                    updateClocks() {
                         const now = new Date();
-                        const dd = String(now.getDate()).padStart(2, '0');
-                        const mm = String(now.getMonth() + 1).padStart(2, '0');
-                        this.currentDate = `${dd}.${mm}.${now.getFullYear()}`;
-
                         this.clocks.forEach(c => {
                             c.time = new Intl.DateTimeFormat('en-US', {
                                 timeZone: c.zone,
@@ -457,29 +452,18 @@
                         });
                     }
                 }"
-                x-init="updateDateTime(); setInterval(() => updateDateTime(), 1000)"
-                class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                x-init="updateClocks(); setInterval(() => updateClocks(), 1000)"
+                class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                <template x-for="clock in clocks" :key="clock.name">
+                    <div class="flex items-center gap-2">
+                        <!-- Live indicator dot -->
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" x-show="clock.name === 'IST'"></span>
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500/80" x-show="clock.name !== 'IST'"></span>
 
-                <!-- Date -->
-                <div class="flex items-center justify-center md:justify-start gap-2">
-                    <span class="text-gray-500 font-semibold uppercase tracking-wider text-sm">Date:</span>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPurple font-bold text-base sm:text-lg tabular-nums" x-text="currentDate"></span>
-                </div>
-
-                <!-- City clocks -->
-                <div class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
-                    <template x-for="clock in clocks" :key="clock.name">
-                        <div class="flex items-center gap-2">
-                            <!-- Live indicator dot -->
-                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" x-show="clock.name === 'IST'"></span>
-                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500/80" x-show="clock.name !== 'IST'"></span>
-
-                            <span class="text-gray-500 font-semibold text-sm" x-text="clock.name"></span>
-                            <span class="text-neonCyan font-bold text-base sm:text-lg tabular-nums" x-text="clock.time"></span>
-                        </div>
-                    </template>
-                </div>
-
+                        <span class="text-gray-500 font-semibold text-sm" x-text="clock.name"></span>
+                        <span class="text-neonCyan font-bold text-base sm:text-lg tabular-nums" x-text="clock.time"></span>
+                    </div>
+                </template>
             </div>
 
         </div>

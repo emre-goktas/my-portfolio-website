@@ -27,4 +27,8 @@ python3 -m http.server 8000
 npx serve .
 ```
 
+## 📝 Content Admin
+
+Content (projects, blog) and media are managed at `/admin` via [Sveltia CMS](https://github.com/sveltia/sveltia-cms). Sign in with "Sign In with Token" using a GitHub fine-grained PAT scoped to this repo only (Contents: Read & Write). On first media upload, the CMS will prompt in-browser for the Cloudflare R2 Secret Access Key — it's stored in the browser's local storage only, never committed to the repo.
+
 ----

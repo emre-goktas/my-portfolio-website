@@ -1,0 +1,68 @@
+backend:
+  name: github
+  repo: emre-goktas/my-portfolio-website
+  branch: main
+
+media_libraries:
+  cloudflare_r2:
+    access_key_id: "797a8fd94e939925aabd1e77b5a7df96" # cloudflare_info.md > "Access Key ID"
+    bucket: portfoliowebsite-media
+    account_id: "ad6e9def0d7826585c007dc05f8abf8a" # cloudflare_info.md > "Account ID"
+    public_url: https://cdn.emregoktas.dev
+
+collections:
+  - name: project_cards
+    label: "Proje Kartları"
+    files:
+      - name: projects_data
+        label: "Proje Kartları"
+        file: projects/projects.json
+        fields:
+          - name: projects
+            label: Projeler
+            widget: list
+            label_singular: Proje
+            summary: "{{title}}"
+            fields:
+              - { name: id, label: "ID (benzersiz, artan sayı)", widget: number, value_type: int, hint: "Var olan en yüksek ID'den bir fazlasını kullan." }
+              - { name: title, label: Başlık, widget: string }
+              - { name: description, label: "Açıklama", widget: text, hint: "Link eklemek istersen HTML olarak yazabilirsin: <a href='...' target='_blank'>Try</a>" }
+              - { name: tags, label: "Teknoloji Etiketleri", widget: list }
+              - { name: screenshot, label: Screenshot, widget: image }
+              - { name: gif, label: "GIF (opsiyonel)", widget: image, required: false }
+              - { name: video, label: "Video (opsiyonel — dosya yükle ya da YouTube linki yapıştır)", widget: file, required: false }
+              - { name: markdownFile, label: "Detay Sayfası Dosya Yolu", widget: string, hint: "Aşağıdaki 'Proje Detay Sayfaları'nda oluşturduğun dosyanın yolu, örn. projects/yeni-proje.md" }
+
+  - name: project_pages
+    label: "Proje Detay Sayfaları"
+    folder: projects
+    format: raw
+    extension: md
+    create: true
+    fields:
+      - { name: body, label: "İçerik (Markdown)", widget: markdown }
+
+  - name: blog_index
+    label: "Blog Yazı Listesi"
+    files:
+      - name: posts_data
+        label: "Blog Yazı Listesi"
+        file: blog/blogs.json
+        fields:
+          - name: posts
+            label: Yazılar
+            widget: list
+            label_singular: Yazı
+            summary: "{{title}}"
+            fields:
+              - { name: title, label: Başlık, widget: string }
+              - { name: file, label: "Dosya Yolu", widget: string, hint: "Aşağıdaki 'Blog Yazıları'nda oluşturduğun dosyanın yolu, örn. blog/yeni-yazi.md" }
+
+  - name: blog_posts
+    label: "Blog Yazıları"
+    folder: blog
+    format: raw
+    extension: md
+    create: true
+    fields:
+      - { name: body, label: "İçerik (Markdown)", widget: markdown }
