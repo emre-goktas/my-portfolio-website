@@ -2,7 +2,7 @@
   "posts": [
     {
       "title": "Welcome to My Blog",
-      "file": "blog/welcome.md"
+      "body": "Welcome to My Blog\nBLOG POST WİLL BE HERE SOON"
     }
   ]
 }
