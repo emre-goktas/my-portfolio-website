@@ -3,6 +3,10 @@
     {
       "title": "Welcome to My Blog",
       "file": "blog/welcome.md"
+    },
+    {
+      "title": "just tryin sveltia cms",
+      "file": "blog/try"
     }
   ]
 }
