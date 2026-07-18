@@ -17,20 +17,13 @@
         style="display: none;">
         <template x-for="project in projects" :key="project.id">
 
-            <div @click="goToProject(project.id)"
+            <div @click="!$event.target.closest('a') && goToProject(project.id)"
                 class="bg-darkCard rounded-xl overflow-hidden border border-gray-800 hover:border-neonCyan transition-all duration-300 group cursor-pointer shadow-lg hover:shadow-[0_0_15px_rgba(0,243,255,0.2)] flex flex-col h-full transform hover:-translate-y-1">
 
                 <!-- Card Image -->
                 <div class="h-40 bg-gray-900 relative overflow-hidden">
                     <img :src="project.screenshot + '?t=' + new Date().getTime()" :alt="project.title"
                         class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105">
-
-                    <!-- View Overlay -->
-                    <div
-                        class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span
-                            class="text-neonCyan font-bold tracking-widest border border-neonCyan px-4 py-2 rounded-full backdrop-blur-sm">VIEW DETAILS</span>
-                    </div>
                 </div>
 
                 <!-- Card Content -->
@@ -41,22 +34,12 @@
                         <p class="text-gray-400 text-sm line-clamp-3 mb-4" x-html="project.description"></p>
                     </div>
 
-                    <div class="mt-auto">
-                        <!-- Tags -->
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            <template x-for="tag in project.tags" :key="tag">
-                                <span
-                                    class="text-xs font-semibold px-2 py-1 rounded bg-gray-800 text-neonPurple border border-gray-700"
-                                    x-text="tag"></span>
-                            </template>
-                        </div>
-
-                        <!-- Live Demo -->
-                        <template x-if="project.liveUrl">
-                            <a :href="project.liveUrl" target="_blank" rel="noopener" @click.stop
-                                class="block text-center px-4 py-2 bg-neonPurple/10 border border-neonPurple text-neonPurple hover:bg-neonPurple hover:text-black rounded-lg text-xs font-semibold tracking-wider transition-all duration-300 uppercase">
-                                Live Demo →
-                            </a>
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <template x-for="tag in project.tags" :key="tag">
+                            <span
+                                class="text-xs font-semibold px-2 py-1 rounded bg-gray-800 text-neonPurple border border-gray-700"
+                                x-text="tag"></span>
                         </template>
                     </div>
                 </div>
