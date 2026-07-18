@@ -136,14 +136,19 @@
 
     <!-- Global scripts -->
     <script>
+        // Shared navigation helper: used by featuredApp() and projectsApp()
+        // card click handlers to jump straight to a project's detail page
+        // via the existing SPA router (pushState + handleRouting).
+        function goToProject(id) {
+            window.history.pushState({}, '', `/project/${id}`);
+            handleRouting();
+        }
+
         function projectsApp() {
             return {
                 projects: [],
                 loading: true,
                 error: null,
-                modalOpen: false,
-                activeProject: null,
-                mediaType: 'image',
 
                 async init() {
                     try {
@@ -158,44 +163,7 @@
                     }
                 },
 
-                openModal(project) {
-                    this.activeProject = project;
-                    this.mediaType = 'image';
-                    this.modalOpen = true;
-                    // Prevent body scroll
-                    document.body.style.overflow = 'hidden';
-                },
-
-                viewFullProject(id) {
-                    // Force close immediately instead of using the multi-step closeModal()
-                    this.modalOpen = false;
-                    this.mediaType = 'image';
-                    document.body.style.overflow = '';
-
-                    // Small delay to clear active project so UI doesn't flicker before content swap
-                    setTimeout(() => {
-                        this.activeProject = null;
-                    }, 100);
-
-                    // Update hash for shareable link
-                    window.history.pushState({}, '', `/project/${id}`);
-                    handleRouting();
-                },
-
-                closeModal() {
-                    if (this.mediaType !== 'image') {
-                        this.mediaType = 'image';
-                        return;
-                    }
-
-                    this.modalOpen = false;
-                    // Add short delay to clear active project so transitions finish smoothly
-                    setTimeout(() => {
-                        this.activeProject = null;
-                    }, 300);
-                    // Restore body scroll
-                    document.body.style.overflow = '';
-                }
+                goToProject
             }
         }
 
@@ -260,7 +228,8 @@
                     } catch (err) {
                         console.error("Fetch error: ", err);
                     }
-                }
+                },
+                goToProject
             }
         }
 

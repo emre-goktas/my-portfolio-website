@@ -93,20 +93,34 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <template x-for="(project, index) in featured" :key="project.id">
-                <div class="bg-darkCard rounded-xl overflow-hidden border border-gray-800 transition-all group cursor-pointer"
+                <div class="bg-darkCard rounded-xl overflow-hidden border border-gray-800 transition-all group cursor-pointer flex flex-col"
                     :class="index % 2 === 0 ? 'hover:border-neonCyan' : 'hover:border-neonPurple'"
-                    hx-get="/pages/projects.html" hx-target="#main-content" hx-swap="innerHTML transition:true">
-                    <!-- HTMX Note: Since Alpine renders this dynamically, HTMX might not process the hx-get attribute automatically. We need to tell Alpine to process it after rendering. -->
-                    <div class="h-48 bg-gray-900 relative"
-                        x-init="$nextTick(() => { htmx.process($el.parentElement) })">
+                    @click="goToProject(project.id)">
+                    <div class="h-32 bg-gray-900 relative">
                         <img :src="project.screenshot" :alt="project.title"
                             class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <h3 class="text-xl font-semibold mb-2 transition-colors"
                             :class="index % 2 === 0 ? 'group-hover:text-neonCyan' : 'group-hover:text-neonPurple'"
                             x-text="project.title"></h3>
-                        <p class="text-gray-400 text-sm line-clamp-2" x-html="project.description"></p>
+                        <p class="text-gray-400 text-sm line-clamp-2 mb-4" x-html="project.description"></p>
+
+                        <div class="mt-auto">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <template x-for="tag in project.tags" :key="tag">
+                                    <span class="text-xs font-semibold px-2 py-1 rounded bg-gray-800 text-neonPurple border border-gray-700"
+                                        x-text="tag"></span>
+                                </template>
+                            </div>
+
+                            <template x-if="project.liveUrl">
+                                <a :href="project.liveUrl" target="_blank" rel="noopener" @click.stop
+                                    class="block text-center px-4 py-2 bg-neonPurple/10 border border-neonPurple text-neonPurple hover:bg-neonPurple hover:text-black rounded-lg text-xs font-semibold tracking-wider transition-all duration-300 uppercase">
+                                    Live Demo →
+                                </a>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </template>
