@@ -252,6 +252,22 @@
             }
         }
 
+        function aboutApp() {
+            return {
+                video: '',
+                async init() {
+                    try {
+                        const res = await fetch(`/about.json?t=${new Date().getTime()}`);
+                        if (res.ok) {
+                            this.video = (await res.json()).video || '';
+                        }
+                    } catch (err) {
+                        console.error("Failed to load about data", err);
+                    }
+                }
+            }
+        }
+
         // Simple Path Router with SEO Titles
         const routes = {
             '/': { page: '/pages/home.html', title: 'Emre GOKTAS - Portfolio', desc: "Emre GOKTAS's portfolio. I design AI agents and automation systems." },
@@ -314,6 +330,7 @@
             Alpine.data('blogLoader', blogLoader);
             Alpine.data('featuredApp', featuredApp);
             Alpine.data('projectDetailApp', projectDetailApp);
+            Alpine.data('aboutApp', aboutApp);
         });
 
         // Routing Listeners

@@ -1,4 +1,4 @@
-<div class="max-w-4xl mx-auto py-12 animate-fade-in" x-data>
+<div class="max-w-4xl mx-auto py-12 animate-fade-in" x-data="aboutApp">
 
     <!-- Top Header & Contact Section -->
     <div class="flex flex-col md:flex-row justify-between items-start mb-8 border-b border-gray-800 pb-6 gap-6">
@@ -91,11 +91,12 @@
         <div
             class="w-full bg-darkCard rounded-2xl overflow-hidden border border-gray-800 shadow-xl border-glow-cyan relative">
             <div class="aspect-video bg-black relative flex items-center justify-center">
-                <!-- HTML5 Local Video Player -->
-                <video src="assets/video.mp4" controls
+                <!-- HTML5 Video Player (uploaded via /admin, served from Cloudflare R2) -->
+                <video x-show="video" :src="video" controls
                     class="absolute top-0 left-0 w-full h-full object-cover rounded-2xl" poster="assets/image.png">
                     Tarayıcınız video etiketini desteklemiyor. Lütfen videoyu indirin veya modern bir tarayıcı kullanın.
                 </video>
+                <p x-show="!video" class="text-gray-500 italic">Video yakında eklenecek.</p>
             </div>
         </div>
 

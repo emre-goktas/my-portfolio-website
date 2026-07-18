@@ -48,3 +48,12 @@ collections:
             fields:
               - { name: title, label: Başlık, widget: string }
               - { name: body, label: "İçerik (Markdown)", widget: markdown }
+
+  - name: about_page
+    label: "Hakkımda"
+    files:
+      - name: about_data
+        label: "Hakkımda"
+        file: about.json
+        fields:
+          - { name: video, label: "Sunum Videosu", widget: file, required: false, hint: "About Me sayfasındaki tanıtım videosu." }
